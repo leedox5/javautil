@@ -1,5 +1,9 @@
 package kr.leedox;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Util {
 	public static String repeat(String input, int count) {
 		StringBuffer sb = new StringBuffer();
@@ -19,6 +23,14 @@ public class Util {
 		}
 	}
 	
+	public static int getMaxLen(List<List<String>> list, int idx) {
+        List<Integer> lens = new ArrayList<Integer>();
+        for(List<String> row : list) {
+            lens.add(getFilledStrLen(row.get(idx)));
+        }
+        return (Integer) Collections.max(lens);
+    }
+
 	public static int getFilledStrLen(String str) {
 		int en = 0;
 		int ko = 0;
