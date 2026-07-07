@@ -58,3 +58,40 @@
 - [x] `mvn package` 성공
 - [x] `CalendarUtil` 분 반환 회귀 테스트 통과
 - [x] 신규 개발자가 문서만 보고 동일하게 실행 가능
+
+## 다음 단계 로드맵
+
+기본 셋업이 끝났으므로 이제는 유틸 라이브러리로서의 안정성과 유지보수성을 높이는 작업을 진행합니다.
+
+1. CI 추가
+   - GitHub Actions로 `mvn clean test`와 `mvn package`를 자동 실행합니다.
+   - `main` 브랜치 push와 pull request에서 회귀를 확인합니다.
+   - 용어 설명:
+     - GitHub Actions: GitHub 저장소에서 특정 이벤트가 발생했을 때 정해진 작업을 자동으로 실행해주는 기능입니다. 이 프로젝트에서는 push나 pull request가 생기면 Maven 테스트와 패키징을 실행합니다.
+     - CI: Continuous Integration의 약자로, 변경사항을 자주 합치면서 자동 빌드와 테스트로 문제가 없는지 확인하는 개발 방식입니다.
+     - 회귀: 기존에 잘 동작하던 기능이 새 변경 때문에 다시 깨지는 현상입니다. 예를 들어 `CalendarUtil.getNowMinute()`를 고친 뒤 나중에 실수로 다시 월 값을 반환하게 되면 회귀입니다.
+
+2. `Util` 입력 방어 정책 정리
+   - `repeat(null, 3)` 같은 `null` 입력 처리 방식을 정합니다.
+   - `fillRight(null, 5)`, `getMaxLen(emptyList, 0)` 같은 경계값 정책을 테스트로 고정합니다.
+   - 예외를 던질지 안전한 기본값을 반환할지 명확히 합니다.
+
+3. `CalendarUtil` 날짜 파싱 정책 정리
+   - `SimpleDateFormat`의 lenient 파싱 동작을 유지할지 엄격하게 막을지 결정합니다.
+   - 잘못된 날짜 입력을 `null`로 처리할지 예외로 처리할지 테스트로 고정합니다.
+
+4. Java 버전 정책 최종 결정
+   - 라이브러리 호환성을 우선하면 Java 8 target을 유지합니다.
+   - 최신 문법과 런타임을 우선하면 Java 17로 상향합니다.
+
+5. 패키지와 아티팩트 이름 정리
+   - `artifactId`와 프로젝트 이름이 일관되도록 정리합니다.
+   - 배포 또는 외부 사용을 고려해 `javautil` 또는 `java-util` 같은 이름으로 맞춥니다.
+
+## 현재 진행 항목
+
+- [x] GitHub Actions CI 추가
+- [ ] `Util` 입력 방어 정책 정리
+- [ ] `CalendarUtil` 날짜 파싱 정책 정리
+- [ ] Java 버전 정책 최종 결정
+- [ ] 패키지와 아티팩트 이름 정리
