@@ -81,7 +81,7 @@ public class CalendarUtil {
 	 * 현재의 minute를 반환한다.
 	 */
 	public static int getNowMinute() {
-		return CalendarUtil.getMonth(CalendarUtil.getNow());
+		return CalendarUtil.getMinute(CalendarUtil.getNow());
 	}
 	
 	/**
