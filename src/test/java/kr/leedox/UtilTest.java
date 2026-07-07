@@ -1,6 +1,7 @@
 package kr.leedox;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,5 +37,32 @@ public class UtilTest {
 
         assertEquals(7, Util.getMaxLen(rows, 0));
         assertEquals(3, Util.getMaxLen(rows, 1));
+    }
+
+    @Test
+    public void repeatRejectsInvalidArguments() {
+        assertThrows(NullPointerException.class, () -> Util.repeat(null, 1));
+        assertThrows(IllegalArgumentException.class, () -> Util.repeat("a", -1));
+    }
+
+    @Test
+    public void fillRightRejectsInvalidArguments() {
+        assertThrows(NullPointerException.class, () -> Util.fillRight(null, 2));
+        assertThrows(IllegalArgumentException.class, () -> Util.fillRight("abc", -1));
+    }
+
+    @Test
+    public void getFilledStrLenRejectsNull() {
+        assertThrows(NullPointerException.class, () -> Util.getFilledStrLen(null));
+    }
+
+    @Test
+    public void getMaxLenRejectsInvalidInputs() {
+        assertThrows(NullPointerException.class, () -> Util.getMaxLen(null, 0));
+        assertThrows(IllegalArgumentException.class, () -> Util.getMaxLen(Arrays.<List<String>>asList(), 0));
+        assertThrows(IllegalArgumentException.class, () -> Util.getMaxLen(Arrays.asList(Arrays.asList("a")), -1));
+        assertThrows(IllegalArgumentException.class, () -> Util.getMaxLen(Arrays.asList(Arrays.asList("a")), 1));
+        assertThrows(NullPointerException.class, () -> Util.getMaxLen(Arrays.asList((List<String>) null), 0));
+        assertThrows(NullPointerException.class, () -> Util.getMaxLen(Arrays.asList(Arrays.asList((String) null)), 0));
     }
 }

@@ -3,22 +3,11 @@
 현재 기준으로 프로젝트 구조와 IDE 진단상 컴파일 에러는 없습니다.
 다만 실제로 신뢰 가능한 동작 상태가 되려면 아래 순서로 정리하는 것이 좋습니다.
 
-## 핵심 이슈
+## 현재 상태 요약
 
-### 기능 버그 수정 필요
-
-- `CalendarUtil.java:83`이 분이 아니라 월 값을 반환하고 있습니다.
-- 반환식이 `CalendarUtil.java:84`라 오동작 가능성이 큽니다.
-
-### 테스트 보강 필요
-
-- 기존 테스트는 `AppTest.java:16`의 항상 참 테스트만 있어 회귀 방지가 어렵습니다.
-- 최소한 주요 유틸 메서드와 날짜/시간 핵심 동작을 검증해야 합니다.
-
-### 빌드 기준 정리 필요
-
-- `pom.xml:17`과 `pom.xml:18`이 Java 1.7 기준이라 최신 환경 재현성과 유지보수성이 떨어집니다.
-- Java 8 유지 또는 Java 17 상향 중 하나로 정책을 정리해야 합니다.
+- `CalendarUtil.getNowMinute()` 오동작은 수정되어 분(minute) 값을 반환합니다.
+- 테스트가 `AppTest`, `UtilTest`, `CalendarUtilTest`로 확장되어 핵심 유틸 동작을 검증합니다.
+- 빌드 기준은 Java 8 타깃, JUnit 4.13.2로 정리되어 있습니다.
 
 ## 실행 가능한 작업 순서
 
@@ -54,10 +43,10 @@
 
 ## 완료 정의
 
-- [x] `mvn clean test` 통과
-- [x] `mvn package` 성공
-- [x] `CalendarUtil` 분 반환 회귀 테스트 통과
-- [x] 신규 개발자가 문서만 보고 동일하게 실행 가능
+- [x] 로컬에서 `mvn clean test` 통과 확인
+- [x] 로컬에서 `mvn package` 성공 확인
+- [x] `CalendarUtil` 분 반환 회귀 테스트 추가 및 정합성 확인
+- [x] 실행/설치 문서(`README.md`) 정리
 
 ## 다음 단계 로드맵
 
@@ -75,6 +64,10 @@
    - `repeat(null, 3)` 같은 `null` 입력 처리 방식을 정합니다.
    - `fillRight(null, 5)`, `getMaxLen(emptyList, 0)` 같은 경계값 정책을 테스트로 고정합니다.
    - 예외를 던질지 안전한 기본값을 반환할지 명확히 합니다.
+   - 결정한 정책:
+     - `null` 입력은 `NullPointerException`으로 즉시 실패합니다.
+     - 음수 크기나 음수 반복 횟수는 `IllegalArgumentException`으로 실패합니다.
+     - 빈 목록이나 범위를 벗어난 인덱스도 `IllegalArgumentException`으로 실패합니다.
 
 3. `CalendarUtil` 날짜 파싱 정책 정리
    - `SimpleDateFormat`의 lenient 파싱 동작을 유지할지 엄격하게 막을지 결정합니다.
@@ -91,7 +84,7 @@
 ## 현재 진행 항목
 
 - [x] GitHub Actions CI 추가
-- [ ] `Util` 입력 방어 정책 정리
+- [x] `Util` 입력 방어 정책 정리 (`null`, 음수/빈 입력 경계값 정책 반영)
 - [ ] `CalendarUtil` 날짜 파싱 정책 정리
-- [ ] Java 버전 정책 최종 결정
+- [ ] Java 버전 정책 최종 결정 (8 유지 vs 17 상향)
 - [ ] 패키지와 아티팩트 이름 정리
